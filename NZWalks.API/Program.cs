@@ -29,7 +29,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference(options =>
     {
         options.WithTitle("NZWalks API")
-        .WithTheme(ScalarTheme.Mars)
+        .WithTheme(ScalarTheme.BluePlanet)
         .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
 
     });
