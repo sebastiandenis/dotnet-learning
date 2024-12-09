@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "5vKGHmJnI6Q=",
+  "dgSpecHash": "Khim3FdDY+U=",
   "success": true,
   "projectFilePath": "/Users/sebastiandenis/repos/github/dotnet-learning/NZWalks.API/NZWalks.API.csproj",
   "expectedPackageFiles": [
+    "/Users/sebastiandenis/.nuget/packages/automapper/13.0.1/automapper.13.0.1.nupkg.sha512",
     "/Users/sebastiandenis/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/sebastiandenis/.nuget/packages/microsoft.aspnetcore.openapi/9.0.0/microsoft.aspnetcore.openapi.9.0.0.nupkg.sha512",
     "/Users/sebastiandenis/.nuget/packages/microsoft.bcl.asyncinterfaces/7.0.0/microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",

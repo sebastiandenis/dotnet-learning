@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,11 @@ namespace NZWalks.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RegionsController(NZWalksDbContext dbContext, IRegionRepository regionRepository) : ControllerBase
+    public class RegionsController(NZWalksDbContext dbContext, IRegionRepository regionRepository, IMapper mapper) : ControllerBase
     {
         private readonly NZWalksDbContext dbContext = dbContext;
         private readonly IRegionRepository regionRepository = regionRepository;
+        private readonly IMapper mapper = mapper;
 
         // get all regions
         // get: /api/regions
@@ -22,13 +24,9 @@ namespace NZWalks.API.Controllers
         {
             var regions = await regionRepository.GetAllAsync();
 
-            var regionsDto = regions.Select(r => new RegionDto
-            {
-                Id = r.Id,
-                Code = r.Code,
-                Name = r.Name,
-                RegionImageUrl = r.RegionImageUrl
-            });
+            // map domain models to DTOs     
+            var regionsDto = mapper.Map<List<RegionDto>>(regions);
+
             return Ok(regionsDto);
         }
 
@@ -44,33 +42,17 @@ namespace NZWalks.API.Controllers
                 return NotFound();
             }
 
-            var regionDto = new RegionDto
-            {
-                Id = region.Id,
-                Code = region.Code,
-                Name = region.Name,
-                RegionImageUrl = region.RegionImageUrl
-            };
-            return Ok(region);
+            var regionDto = mapper.Map<RegionDto>(region);
+
+            return Ok(regionDto);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(AddRegionRequestDto newRegion)
         {
-            var region = await regionRepository.CreateAsync(new Region
-            {
-                Code = newRegion.Code,
-                Name = newRegion.Name,
-                RegionImageUrl = newRegion.RegionImageUrl
-            });
-
-            var regionDto = new RegionDto
-            {
-                Id = region.Id,
-                Code = region.Code,
-                Name = region.Name,
-                RegionImageUrl = region.RegionImageUrl
-            };
+            var regionDomain = mapper.Map<Region>(newRegion);
+            var region = await regionRepository.CreateAsync(regionDomain);
+            var regionDto = mapper.Map<RegionDto>(region);
 
             return CreatedAtAction(nameof(GetById), new { id = region.Id }, regionDto);
 
@@ -80,12 +62,7 @@ namespace NZWalks.API.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, UpdateRegionDto updatedRegion)
         {
-            var region = new Region
-            {
-                Code = updatedRegion.Code,
-                Name = updatedRegion.Name,
-                RegionImageUrl = updatedRegion.RegionImageUrl
-            };
+            var region = mapper.Map<Region>(updatedRegion);
 
             region = await regionRepository.UpdateAsync(id, region);
 
@@ -94,13 +71,7 @@ namespace NZWalks.API.Controllers
                 return NotFound();
             }
 
-            var regionDto = new RegionDto
-            {
-                Id = region.Id,
-                Code = region.Code,
-                Name = region.Name,
-                RegionImageUrl = region.RegionImageUrl
-            };
+            var regionDto = mapper.Map<RegionDto>(region);
 
             return Ok(regionDto);
         }
