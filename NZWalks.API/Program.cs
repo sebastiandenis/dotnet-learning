@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using NZWalks.API.Data;
+using NZWalks.API.Repositories;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +16,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<NZWalksDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("NZWalksConnectionString"),
     npgsqlOptions => npgsqlOptions.MigrationsHistoryTable("__EFMigrationsHistory", "NZWalks"))
-
     );
 
+builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
 
 var app = builder.Build();
 
